@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flipkart Clone | Online Shopping Site for Fashion, Electronics, Home & More</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts (Roboto) -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            fkBlue: '#2874f0',
+            fkYellow: '#ffe500',
+            fkLightBlue: '#f1f3f6',
+            fkDarkBlue: '#172337',
+            fkGreen: '#388e3c',
+          },
+          fontFamily: {
+            sans: ['Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-fkLightBlue font-sans text-gray-800 min-h-screen flex flex-col">
+
+  <!-- TOP HEADER -->
+  <header class="bg-fkBlue text-white sticky top-0 z-40 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between gap-4">
+      
+      <!-- Left: Logo & Search -->
+      <div class="flex items-center gap-6 flex-1 max-w-3xl">
+        <!-- Flipkart Logo -->
+        <a href="#" onclick="resetFilters()" class="flex flex-col leading-none">
+          <span class="text-xl font-bold italic tracking-wide">Flipkart</span>
+          <span class="text-[10px] italic font-semibold text-gray-200 flex items-center hover:underline">
+            Explore <span class="text-fkYellow font-bold ml-0.5">Plus</span>
+            <img src="https://img1a.flixcart.com/www/linchpin/fk-cp-zion/img/plus_aef861.png" alt="plus star" class="w-2.5 h-2.5 ml-0.5">
+          </span>
+        </a>
+
+        <!-- Search Bar -->
+        <div class="relative flex-1 hidden md:block">
+          <form id="search-form" onsubmit="handleSearch(event)">
+            <input 
+              type="text" 
+              id="search-input"
+              placeholder="Search for products, brands and more" 
+              class="w-full text-sm text-gray-800 px-4 py-2 rounded-sm focus:outline-none pr-10 shadow-inner"
+              oninput="showSearchSuggestions(this.value)"
+            >
+            <button type="submit" class="absolute right-3 top-2.5 text-fkBlue font-bold">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </form>
+          <!-- Search Suggestions dropdown -->
+          <div id="search-suggestions" class="absolute left-0 right-0 top-full mt-1 bg-white text-gray-800 rounded shadow-lg hidden max-h-60 overflow-y-auto z-50">
+            <!-- Dynamic suggestions here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Navigation elements -->
+      <div class="flex items-center gap-4 lg:gap-8 text-sm font-medium">
+        
+        <!-- Login Button / Profile -->
+        <div class="relative group">
+          <button id="login-btn" onclick="openAuthModal()" class="bg-white text-fkBlue font-bold px-8 py-1 rounded-sm shadow-sm hover:bg-gray-100 transition-colors">
+            Login
+          </button>
+          <div id="user-profile-menu" class="hidden relative">
+            <button class="flex items-center gap-1.5 font-semibold text-white focus:outline-none">
+              <i class="fa-solid fa-circle-user text-lg"></i>
+              <span id="username-display">My Account</span>
+              <i class="fa-solid fa-chevron-down text-[10px]"></i>
+            </button>
+            <!-- Dropdown Menu -->
+            <div class="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-sm shadow-lg border border-gray-100 py-1 hidden group-hover:block">
+              <a href="#" class="px-4 py-2.5 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-100"><i class="fa-solid fa-user text-fkBlue"></i> My Profile</a>
+              <a href="#" onclick="openCart()" class="px-4 py-2.5 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-100"><i class="fa-solid fa-wallet text-fkBlue"></i> Orders & Cart</a>
+              <a href="#" onclick="logoutUser()" class="px-4 py-2.5 hover:bg-gray-50 flex items-center gap-2 text-red-600"><i class="fa-solid fa-power-off"></i> Logout</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Become a Seller -->
+        <a href="#" class="hidden lg:block hover:text-gray-100">Become a Seller</a>
+
+        <!-- More Dropdown -->
+        <div class="relative group hidden sm:block">
+          <button class="flex items-center gap-1 hover:text-gray-100">
+            <span>More</span>
+            <i class="fa-solid fa-chevron-down text-[10px] group-hover:rotate-180 transition-transform"></i>
+          </button>
+          <div class="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-sm shadow-lg border border-gray-100 py-1 hidden group-hover:block z-50">
+            <a href="#" class="px-4 py-2.5 hover:bg-gray-50 flex items-center gap-2"><i class="fa-solid fa-bell text-fkBlue"></i> Notification Prefs</a>
+            <a href="#" class="px-4 py-2.5 hover:bg-gray-50 flex items-center gap-2"><i class="fa-solid fa-headset text-fkBlue"></i> 24x7 Customer Care</a>
+            <a href="#" class="px-4 py-2.5 hover:bg-gray-50 flex items-center gap-2"><i class="fa-solid fa-arrow-trend-up text-fkBlue"></i> Advertise</a>
+            <a href="#" class="px-4 py-2.5 hover:bg-gray-50 flex items-center gap-2"><i class="fa-solid fa-download text-fkBlue"></i> Download App</a>
+          </div>
+        </div>
+
+        <!-- Cart Link -->
+        <button onclick="openCart()" class="flex items-center gap-2 hover:text-gray-100 relative">
+          <div class="relative">
+            <i class="fa-solid fa-cart-shopping text-lg"></i>
+            <span id="cart-badge" class="absolute -top-2.5 -right-2.5 bg-fkYellow text-fkDarkBlue text-[11px] font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-fkBlue hidden">0</span>
+          </div>
+          <span class="font-bold">Cart</span>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- Mobile Search Bar -->
+    <div class="px-4 pb-2.5 block md:hidden">
+      <form onsubmit="handleSearch(event)">
+        <div class="relative">
+          <input 
+            type="text" 
+            id="search-input-mobile"
+            placeholder="Search for products, brands and more" 
+            class="w-full text-sm text-gray-800 px-4 py-2 rounded-sm focus:outline-none pr-10 shadow-inner"
+          >
+          <button type="submit" class="absolute right-3 top-2 text-fkBlue font-bold">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </header>
+
+  <!-- CATEGORY BAR -->
+  <section class="bg-white shadow-sm border-b border-gray-200 py-3 overflow-x-auto whitespace-nowrap scrollbar-thin">
+    <div class="max-w-7xl mx-auto px-4 flex justify-between items-center gap-6 min-w-[768px]">
+      
+      <button onclick="filterByCategory('all')" class="flex flex-col items-center gap-1 group focus:outline-none">
+        <img src="https://rukminim1.flixcart.com/flap/128/128/image/f15c02bfeb02d15d.png?q=100" alt="All Products" class="w-14 h-14 object-contain group-hover:scale-105 transition-transform">
+        <span class="text-xs font-semibold text-gray-800 group-hover:text-fkBlue">All Categories</span>
+      </button>
+
+      <button onclick="filterByCategory('grocery')" class="flex flex-col items-center gap-1 group focus:outline-none">
+        <img src="https://rukminim1.flixcart.com/flap/128/128/image/29327f40e3c4d264.png?q=100" alt="Grocery" class="w-14 h-14 object-contain group-hover:scale-105 transition-transform">
+        <span class="text-xs font-semibold text-gray-800 group-hover:text-fkBlue">Grocery</span>
+      </button>
+
+      <button onclick="filterByCategory('mobiles')" class="flex flex-col items-center gap-1 group focus:outline-none">
+        <img src="https://rukminim1.flixcart.com/flap/128/128/image/22f2d580236ea559.png?q=100" alt="Mobiles" class="w-14 h-14 object-contain group-hover:scale-105 transition-transform">
+        <span class="text-xs font-semibold text-gray-800 group-hover:text-fkBlue">Mobiles</span>
+      </button>
+
+      <button onclick="filterByCategory('fashion')" class="flex flex-col items-center gap-1 group focus:outline-none">
+        <img src="https://rukminim1.flixcart.com/flap/128/128/image/82b3ca5fb2301045.png?q=100" alt="Fashion" class="w-14 h-14 object-contain group-hover:scale-105 transition-transform">
+        <span class="text-xs font-semibold text-gray-800 group-hover:text-fkBlue">Fashion</span>
+      </button>
+
+      <button onclick="filterByCategory('electronics')" class="flex flex-col items-center gap-1 group focus:outline-none">
+        <img src="https://rukminim1.flixcart.com/flap/128/128/image/69c758323bd94b9d.png?q=100" alt="Electronics" class="w-14 h-14 object-contain group-hover:scale-105 transition-transform">
+        <span class="text-xs font-semibold text-gray-800 group-hover:text-fkBlue">Electronics</span>
+      </button>
+
+      <button onclick="filterByCategory('home')" class="flex flex-col items-center gap-1 group focus:outline-none">
+        <img src="https://rukminim1.flixcart.com/flap/128/128/image/ab7e2b02185b475d.png?q=100" alt="Home" class="w-14 h-14 object-contain group-hover:scale-105 transition-transform">
+        <span class="text-xs font-semibold text-gray-800 group-hover:text-fkBlue">Home & Living</span>
+      </button>
+
+      <button onclick="filterByCategory('appliances')" class="flex flex-col items-center gap-1 group focus:outline-none">
+        <img src="https://rukminim1.flixcart.com/flap/128/128/image/0ff199d1bd27eb98.png?q=100" alt="Appliances" class="w-14 h-14 object-contain group-hover:scale-105 transition-transform">
+        <span class="text-xs font-semibold text-gray-800 group-hover:text-fkBlue">Appliances</span>
+      </button>
+
+      <button onclick="filterByCategory('beauty')" class="flex flex-col items-center gap-1 group focus:outline-none">
+        <img src="https://rukminim1.flixcart.com/flap/128/128/image/dff3f7adcf3a90c6.png?q=100" alt="Beauty, Toys & More" class="w-14 h-14 object-contain group-hover:scale-105 transition-transform">
+        <span class="text-xs font-semibold text-gray-800 group-hover:text-fkBlue">Beauty & Toys</span>
+      </button>
+
+      <button onclick="filterByCategory('two-wheelers')" class="flex flex-col items-center gap-1 group focus:outline-none">
+        <img src="https://rukminim1.flixcart.com/images/m_g_f_r_r_d/_/g/d/original-imagg19kg86g5g8a.jpeg?q=100" alt="Two Wheelers" class="w-14 h-14 object-contain group-hover:scale-105 transition-transform">
+        <span class="text-xs font-semibold text-gray-800 group-hover:text-fkBlue">Two Wheelers</span>
+      </button>
+
+    </div>
+  </section>
+
+  <!-- MAIN BODY CONTENT -->
+  <main class="flex-1 max-w-8xl mx-auto w-full px-2 sm:px-4 py-4 flex flex-col gap-4">
+    
+    <!-- CAROUSEL SLIDER -->
+    <section class="relative w-full overflow-hidden rounded bg-white shadow-sm h-36 sm:h-52 md:h-72 lg:h-80">
+      <div id="carousel-container" class="flex transition-transform duration-500 ease-out h-full">
+        <!-- Slides will be injected dynamically -->
+      </div>
+      <!-- Controls -->
+      <button onclick="prevSlide()" class="absolute left-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 px-3 py-6 rounded-r shadow-md z-10 focus:outline-none">
+        <i class="fa-solid fa-chevron-left text-xl"></i>
+      </button>
+      <button onclick="nextSlide()" class="absolute right-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 px-3 py-6 rounded-l shadow-md z-10 focus:outline-none">
+        <i class="fa-solid fa-chevron-right text-xl"></i>
+      </button>
+      <!-- Indicators -->
+      <div id="carousel-indicators" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+        <!-- Indicators injected dynamically -->
+      </div>
+    </section>
+
+    <!-- PROMO CARDS (DEALS OF THE DAY SECTION HEADER) -->
+    <section class="bg-white p-4 shadow-sm rounded flex flex-col gap-4">
+      <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+        <div class="flex items-center gap-3">
+          <h2 class="text-xl font-bold text-gray-900">Deals of the Day</h2>
+          <span id="deal-timer" class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded flex items-center gap-1">
+            <i class="fa-regular fa-clock"></i> <span id="timer-text">16h : 22m : 45s Left</span>
+          </span>
+        </div>
+        <button onclick="resetFilters()" class="bg-fkBlue text-white text-xs font-bold px-4 py-2 rounded-sm uppercase tracking-wider hover:shadow transition-all">View All</button>
+      </div>
+
+      <!-- Horizontal Scrollable Deals -->
+      <div id="deals-container" class="flex gap-4 overflow-x-auto pb-2 scrollbar-thin scroll-smooth">
+        <!-- Deals injected dynamically -->
+      </div>
+    </section>
+
+    <!-- CONTENT GRID (SIDEBAR FILTERS + MAIN PRODUCT CATALOG) -->
+    <div class="flex gap-4 items-start">
+      
+      <!-- SIDEBAR FILTERS (Hidden on small screens, toggleable) -->
+      <aside class="w-72 bg-white shadow-sm p-4 rounded shrink-0 hidden md:flex flex-col gap-6 sticky top-20 max-h-[calc(100vh-100px)] overflow-y-auto">
+        
+        <div class="flex items-center justify-between border-b pb-3">
+          <span class="font-bold text-lg">Filters</span>
+          <button onclick="clearAllFilters()" class="text-xs font-bold text-fkBlue hover:underline">CLEAR ALL</button>
+        </div>
+
+        <!-- Categories Filter -->
+        <div>
+          <h3 class="font-bold text-xs uppercase tracking-wider text-gray-500 mb-2">Category</h3>
+          <div class="flex flex-col gap-2" id="category-filter-list">
+            <!-- Dynamic Category Checkboxes -->
+          </div>
+        </div>
+
+        <!-- Price Range Filter -->
+        <div class="border-t pt-4">
+          <h3 class="font-bold text-xs uppercase tracking-wider text-gray-500 mb-2">Price</h3>
+          <div class="flex flex-col gap-2">
+            <input 
+              type="range" 
+              id="price-range" 
+              min="0" 
+              max="150000" 
+              step="1000" 
+              value="150000" 
+              class="w-full accent-fkBlue"
+              oninput="updatePriceFilterLabel(this.value)"
+            >
+            <div class="flex justify-between items-center text-xs text-gray-600">
+              <span>Min: ₹0</span>
+              <span class="font-bold text-fkBlue" id="price-filter-label">Max: ₹1,50,000</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Customer Ratings Filter -->
+        <div class="border-t pt-4">
+          <h3 class="font-bold text-xs uppercase tracking-wider text-gray-500 mb-2">Customer Ratings</h3>
+          <div class="flex flex-col gap-2">
+            <label class="flex items-center gap-2 text-sm cursor-pointer hover:text-fkBlue">
+              <input type="radio" name="rating-filter" value="4" onclick="applyFilters()" class="accent-fkBlue">
+              <span>4★ & above</span>
+            </label>
+            <label class="flex items-center gap-2 text-sm cursor-pointer hover:text-fkBlue">
+              <input type="radio" name="rating-filter" value="3" onclick="applyFilters()" class="accent-fkBlue">
+              <span>3★ & above</span>
+            </label>
+            <label class="flex items-center gap-2 text-sm cursor-pointer hover:text-fkBlue">
+              <input type="radio" name="rating-filter" value="2" onclick="applyFilters()" class="accent-fkBlue">
+              <span>2★ & above</span>
+            </label>
+            <label class="flex items-center gap-2 text-sm cursor-pointer hover:text-fkBlue">
+              <input type="radio" name="rating-filter" value="all" checked onclick="applyFilters()" class="accent-fkBlue">
+              <span>All Ratings</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Discount Filter -->
+        <div class="border-t pt-4">
+          <h3 class="font-bold text-xs uppercase tracking-wider text-gray-500 mb-2">Discount</h3>
+          <div class="flex flex-col gap-2">
+            <label class="flex items-center gap-2 text-sm cursor-pointer hover:text-fkBlue">
+              <input type="radio" name="discount-filter" value="50" onclick="applyFilters()" class="accent-fkBlue">
+              <span>50% or more</span>
+            </label>
+            <label class="flex items-center gap-2 text-sm cursor-pointer hover:text-fkBlue">
+              <input type="radio" name="discount-filter" value="30" onclick="applyFilters()" class="accent-fkBlue">
+              <span>30% or more</span>
+            </label>
+            <label class="flex items-center gap-2 text-sm cursor-pointer hover:text-fkBlue">
+              <input type="radio" name="discount-filter" value="10" onclick="applyFilters()" class="accent-fkBlue">
+              <span>10% or more</span>
+            </label>
+            <label class="flex items-center gap-2 text-sm cursor-pointer hover:text-fkBlue">
+              <input type="radio" name="discount-filter" value="0" checked onclick="applyFilters()" class="accent-fkBlue">
+              <span>Any Discount</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Assured Brand / Flipkart Assured -->
+        <div class="border-t pt-4">
+          <label class="flex items-center justify-between cursor-pointer">
+            <div class="flex items-center gap-2">
+              <input type="checkbox" id="assured-filter" onclick="applyFilters()" class="accent-fkBlue w-4 h-4">
+              <img src="https://img1a.flixcart.com/www/linchpin/fk-cp-zion/img/fa_62673a.png" alt="Flipkart Assured" class="h-4">
+            </div>
+            <span class="text-xs text-gray-400 font-semibold">What is this?</span>
+          </label>
+        </div>
+
+      </aside>
+
+      <!-- PRODUCT CATALOG -->
+      <section class="flex-1 bg-white p-4 shadow-sm rounded">
+        <!-- Top Controls: Sort By -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b pb-3 gap-3">
+          <div class="flex items-center gap-2">
+            <h2 class="font-bold text-lg" id="catalog-title">All Products</h2>
+            <span id="product-count" class="text-xs text-gray-500">(Showing 0 products)</span>
+          </div>
+          
+          <!-- Sort controls -->
+          <div class="flex items-center gap-2 text-sm overflow-x-auto whitespace-nowrap py-1">
+            <span class="text-gray-500 font-semibold shrink-0">Sort By:</span>
+            <button onclick="sortProducts('relevance')" id="sort-relevance" class="px-3 py-1 rounded text-fkBlue font-bold bg-fkBlue/10">Popularity</button>
+            <button onclick="sortProducts('low-high')" id="sort-low-high" class="px-3 py-1 rounded text-gray-600 hover:text-fkBlue font-medium">Price -- Low to High</button>
+            <button onclick="sortProducts('high-low')" id="sort-high-low" class="px-3 py-1 rounded text-gray-600 hover:text-fkBlue font-medium">Price -- High to Low</button>
+            <button onclick="sortProducts('discount')" id="sort-discount" class="px-3 py-1 rounded text-gray-600 hover:text-fkBlue font-medium">Newest First</button>
+          </div>
+        </div>
+
+        <!-- Active Filters Display -->
+        <div id="active-filters-container" class="flex flex-wrap gap-2 py-3 hidden">
+          <span class="text-xs text-gray-500 font-semibold flex items-center">Active Filters:</span>
+          <!-- Dynamically injected active filter chips -->
+        </div>
+
+        <!-- Product Grid -->
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pt-4">
+          <!-- Products injected dynamically -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden flex-col items-center justify-center py-16 text-center">
+          <img src="https://img1a.flixcart.com/www/linchpin/fk-cp-zion/img/error-no-search-results_2353c5.png" alt="No results" class="w-48 mb-4">
+          <h3 class="text-lg font-bold text-gray-800">Sorry, no results found!</h3>
+          <p class="text-sm text-gray-500 mt-1">Check the spelling or try filtering with other options.</p>
+          <button onclick="clearAllFilters()" class="mt-4 bg-fkBlue text-white font-bold px-6 py-2 rounded shadow hover:bg-blue-600">Clear All Filters</button>
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-fkDarkBlue text-white text-xs mt-10">
+    <!-- Top columns -->
+    <div class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-8 border-b border-gray-700">
+      
+      <div>
+        <h4 class="text-gray-400 font-semibold mb-3 uppercase">ABOUT</h4>
+        <ul class="flex flex-col gap-2">
+          <li><a href="#" class="hover:underline">Contact Us</a></li>
+          <li><a href="#" class="hover:underline">About Us</a></li>
+          <li><a href="#" class="hover:underline">Careers</a></li>
+          <li><a href="#" class="hover:underline">Flipkart Stories</a></li>
+          <li><a href="#" class="hover:underline">Press</a></li>
+          <li><a href="#" class="hover:underline">Corporate Information</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-gray-400 font-semibold mb-3 uppercase">HELP</h4>
+        <ul class="flex flex-col gap-2">
+          <li><a href="#" class="hover:underline">Payments</a></li>
+          <li><a href="#" class="hover:underline">Shipping</a></li>
+          <li><a href="#" class="hover:underline">Cancellation & Returns</a></li>
+          <li><a href="#" class="hover:underline">FAQ</a></li>
+          <li><a href="#" class="hover:underline">Report Infringement</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-gray-400 font-semibold mb-3 uppercase">CONSUMER POLICY</h4>
+        <ul class="flex flex-col gap-2">
+          <li><a href="#" class="hover:underline">Cancellation & Returns</a></li>
+          <li><a href="#" class="hover:underline">Terms Of Use</a></li>
+          <li><a href="#" class="hover:underline">Security</a></li>
+          <li><a href="#" class="hover:underline">Privacy</a></li>
+          <li><a href="#" class="hover:underline">Sitemap</a></li>
+          <li><a href="#" class="hover:underline">Grievance Redressal</a></li>
+          <li><a href="#" class="hover:underline">EPR Compliance</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-gray-400 font-semibold mb-3 uppercase">SOCIAL</h4>
+        <ul class="flex flex-col gap-2">
+          <li><a href="#" class="hover:underline">Facebook</a></li>
+          <li><a href="#" class="hover:underline">Twitter</a></li>
+          <li><a href="#" class="hover:underline">YouTube</a></li>
+        </ul>
+      </div>
+
+      <div class="col-span-2 md:col-span-1 lg:col-span-1 border-t md:border-t-0 pt-4 md:pt-0 border-gray-700">
+        <h4 class="text-gray-400 font-semibold mb-3 uppercase">Mail Us:</h4>
+        <p class="text-gray-300 leading-relaxed">
+          Flipkart Internet Private Limited,<br>
+          Buildings Alyssa, Begonia &<br>
+          Clove Embassy Tech Village,<br>
+          Outer Ring Road, Devarabeesanahalli Village,<br>
+          Bengaluru, 560103,<br>
+          Karnataka, India
+        </p>
+      </div>
+
+      <div class="col-span-2 md:col-span-2 border-t md:border-t-0 pt-4 md:pt-0 border-gray-700">
+        <h4 class="text-gray-400 font-semibold mb-3 uppercase">Registered Office Address:</h4>
+        <p class="text-gray-300 leading-relaxed">
+          Flipkart Internet Private Limited,<br>
+          Buildings Alyssa, Begonia &<br>
+          Clove Embassy Tech Village,<br>
+          Outer Ring Road, Devarabeesanahalli Village,<br>
+          Bengaluru, 560103,<br>
+          Karnataka, India<br>
+          CIN : U51109KA2012PTC066107<br>
+          Telephone: <span class="text-fkBlue font-bold">044-45614700</span>
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Bottom copyright / payment partners -->
+    <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-gray-300">
+      <div class="flex flex-wrap gap-4 items-center justify-center md:justify-start">
+        <span class="flex items-center gap-1.5"><i class="fa-solid fa-store text-fkYellow"></i> Become a Seller</span>
+        <span class="flex items-center gap-1.5"><i class="fa-solid fa-star text-fkYellow"></i> Advertise</span>
+        <span class="flex items-center gap-1.5"><i class="fa-solid fa-gift text-fkYellow"></i> Gift Cards</span>
+        <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle-question text-fkYellow"></i> Help Center</span>
+      </div>
+      <div>
+        <span>© 2024 Flipkart-Clone. Built with ❤️ for demonstration.</span>
+      </div>
+      <div>
+        <img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/payment-method-c443e9.svg" alt="Payment Gateways" class="h-6">
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= MODALS & OVERLAYS ================= -->
+
+  <!-- 1. AUTH MODAL (LOGIN / SIGNUP) -->
+  <div id="auth-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-md overflow-hidden max-w-3xl w-full flex flex-col md:flex-row shadow-2xl relative animate-scale-up">
+      <!-- Close Button -->
+      <button onclick="closeAuthModal()" class="absolute right-4 top-4 text-gray-400 hover:text-gray-600 text-xl font-bold z-10">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Left Column: Flipkart branding info -->
+      <div class="bg-fkBlue text-white p-10 md:w-2/5 flex flex-col justify-between">
+        <div>
+          <h2 class="text-2xl font-bold mb-4">Login</h2>
+          <p class="text-gray-200 leading-relaxed text-sm">Get access to your Orders, Wishlist and Recommendations</p>
+        </div>
+        <div class="hidden md:block">
+          <img src="https://img1a.flixcart.com/www/linchpin/fk-cp-zion/img/login_img_c4a81e.png" alt="Login Graphic" class="w-full">
+        </div>
+      </div>
+
+      <!-- Right Column: Login Form -->
+      <div class="p-10 md:w-3/5 flex flex-col justify-between">
+        <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="flex flex-col gap-6">
+          <div class="relative border-b border-gray-300 focus-within:border-fkBlue transition-colors">
+            <input 
+              type="text" 
+              id="auth-username" 
+              required
+              class="w-full py-2 bg-transparent focus:outline-none text-sm peer placeholder-transparent"
+              placeholder="Enter Email/Mobile number"
+            >
+            <label for="auth-username" class="absolute left-0 -top-3.5 text-xs text-gray-500 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-fkBlue">Enter Email/Mobile number</label>
+          </div>
+
+          <div class="relative border-b border-gray-300 focus-within:border-fkBlue transition-colors">
+            <input 
+              type="password" 
+              id="auth-password" 
+              required
+              class="w-full py-2 bg-transparent focus:outline-none text-sm peer placeholder-transparent"
+              placeholder="Enter Password"
+            >
+            <label for="auth-password" class="absolute left-0 -top-3.5 text-xs text-gray-500 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-fkBlue">Enter Password</label>
+          </div>
+
+          <p class="text-[11px] text-gray-500 leading-relaxed">
+            By continuing, you agree to Flipkart's <a href="#" class="text-fkBlue hover:underline">Terms of Use</a> and <a href="#" class="text-fkBlue hover:underline">Privacy Policy</a>.
+          </p>
+
+          <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded shadow transition-colors text-sm">
+            Log In
+          </button>
+        </form>
+
+        <div class="mt-8 text-center">
+          <a href="#" onclick="switchAuthMode()" class="text-xs font-bold text-fkBlue hover:underline">New to Flipkart? Create an account</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. PRODUCT DETAILS MODAL -->
+  <div id="product-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-md max-w-5xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative p-6 flex flex-col md:flex-row gap-8 animate-scale-up">
+      <!-- Close Button -->
+      <button onclick="closeProductModal()" class="absolute right-4 top-4 text-gray-500 hover:text-gray-800 text-2xl font-bold z-10">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Left Column: Product Images and Purchase Buttons -->
+      <div class="md:w-2/5 flex flex-col gap-4">
+        <div class="border border-gray-200 rounded p-4 flex items-center justify-center bg-white h-80 relative group">
+          <img id="modal-product-img" src="" alt="Product Image" class="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105">
+          <!-- Assured tag on product -->
+          <div id="modal-assured-badge" class="absolute top-3 left-3 bg-white px-1.5 py-0.5 rounded shadow hidden">
+            <img src="https://img1a.flixcart.com/www/linchpin/fk-cp-zion/img/fa_62673a.png" alt="Assured" class="h-4">
+          </div>
+        </div>
+
+        <!-- Purchase Buttons -->
+        <div class="grid grid-cols-2 gap-3">
+          <button id="modal-add-to-cart-btn" onclick="" class="bg-fkYellow text-fkDarkBlue font-bold py-3.5 rounded shadow-sm hover:shadow transition-all flex items-center justify-center gap-2 text-sm uppercase">
+            <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+          </button>
+          <button id="modal-buy-now-btn" onclick="" class="bg-orange-500 text-white font-bold py-3.5 rounded shadow-sm hover:shadow transition-all flex items-center justify-center gap-2 text-sm uppercase">
+            <i class="fa-solid fa-bolt"></i> Buy Now
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Column: Product Info & Specifications -->
+      <div class="md:w-3/5 flex flex-col gap-4">
+        <nav class="text-xs text-gray-500 font-semibold flex gap-1 items-center">
+          <span id="modal-breadcrumb-cat" class="capitalize">Category</span>
+          <i class="fa-solid fa-chevron-right text-[8px]"></i>
+          <span id="modal-breadcrumb-title" class="truncate max-w-[200px]">Product Name</span>
+        </nav>
+
+        <div>
+          <h1 id="modal-product-title" class="text-xl md:text-2xl font-semibold text-gray-900 leading-snug">Product Title</h1>
+          
+          <!-- Rating badge -->
+          <div class="flex items-center gap-3 mt-2">
+            <span id="modal-product-rating" class="bg-fkGreen text-white text-xs font-bold px-2 py-0.5 rounded flex items-center gap-1">
+              4.4 <i class="fa-solid fa-star text-[10px]"></i>
+            </span>
+            <span class="text-sm font-semibold text-gray-500" id="modal-rating-count">14,242 Ratings & 1,512 Reviews</span>
+            <img src="https://img1a.flixcart.com/www/linchpin/fk-cp-zion/img/fa_62673a.png" id="modal-assured-tag" alt="Assured" class="h-5">
+          </div>
+        </div>
+
+        <!-- Pricing -->
+        <div class="bg-green-50/50 p-3 rounded border border-green-100 flex flex-col gap-1">
+          <span class="text-xs text-fkGreen font-bold">Special Price</span>
+          <div class="flex items-baseline gap-3">
+            <span id="modal-product-price" class="text-3xl font-bold text-gray-900">₹24,999</span>
+            <span id="modal-product-oldprice" class="text-sm line-through text-gray-500">₹32,999</span>
+            <span id="modal-product-discount" class="text-sm font-bold text-fkGreen">24% off</span>
+          </div>
+          <p class="text-xs text-gray-500 mt-1"><i class="fa-solid fa-circle-info text-gray-400"></i> Delivery charges of ₹40 might apply based on location.</p>
+        </div>
+
+        <!-- Offers -->
+        <div>
+          <h3 class="font-bold text-sm text-gray-900 mb-2">Available Offers</h3>
+          <ul class="flex flex-col gap-2 text-xs">
+            <li class="flex items-start gap-2"><i class="fa-solid fa-tag text-fkGreen mt-0.5"></i> <span><strong class="font-bold">Bank Offer</strong> 10% instant discount on SBI Credit Cards, up to ₹1,500. <a href="#" class="text-fkBlue font-bold">T&C</a></span></li>
+            <li class="flex items-start gap-2"><i class="fa-solid fa-tag text-fkGreen mt-0.5"></i> <span><strong class="font-bold">Bank Offer</strong> 5% Cashback on Flipkart Axis Bank Card. <a href="#" class="text-fkBlue font-bold">T&C</a></span></li>
+            <li class="flex items-start gap-2"><i class="fa-solid fa-calendar text-fkGreen mt-0.5"></i> <span><strong class="font-bold">No Cost EMI</strong> ₹2,084/month. Standard EMI also available. <a href="#" class="text-fkBlue font-bold">View Plans</a></span></li>
+            <li class="flex items-start gap-2"><i class="fa-solid fa-repeat text-fkGreen mt-0.5"></i> <span><strong class="font-bold">Partner Offer</strong> Purchase this product & get surprise cashback/coupon. <a href="#" class="text-fkBlue font-bold">Know More</a></span></li>
+          </ul>
+        </div>
+
+        <!-- Specifications & Description -->
+        <div class="border-t pt-4">
+          <h3 class="font-bold text-sm text-gray-900 mb-2">Product Description</h3>
+          <p id="modal-product-desc" class="text-sm text-gray-600 leading-relaxed">
+            This is an amazing premium quality product from Flipkart, guaranteed to deliver high performance and exceptional user comfort. Ideal for modern lifestyles.
+          </p>
+        </div>
+
+        <!-- Key Specs table -->
+        <div class="border-t pt-4">
+          <h3 class="font-bold text-sm text-gray-900 mb-2">Key Specifications</h3>
+          <div class="grid grid-cols-2 gap-y-2 text-xs text-gray-700">
+            <div class="font-semibold text-gray-500">Brand</div>
+            <div id="modal-spec-brand">Premium Brand</div>
+            <div class="font-semibold text-gray-500">Model Name</div>
+            <div id="modal-spec-model">FK-Ultra-2024</div>
+            <div class="font-semibold text-gray-500">Warranty</div>
+            <div>1 Year Domestic Warranty</div>
+            <div class="font-semibold text-gray-500">Delivery</div>
+            <div class="text-fkGreen font-semibold">Free Delivery within 3 Days</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. CART SIDEBAR (SLIDE-OUT) -->
+  <div id="cart-sidebar" class="fixed inset-0 bg-black/50 z-50 hidden transition-opacity">
+    <!-- Sliding panel -->
+    <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-fkLightBlue shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300" id="cart-panel">
+      
+      <!-- Cart Header -->
+      <div class="bg-fkBlue text-white p-4 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-cart-shopping text-lg"></i>
+          <span class="font-bold text-lg">My Cart (<span id="cart-count-header">0</span>)</span>
+        </div>
+        <button onclick="closeCart()" class="text-white hover:text-gray-200 text-xl font-bold">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Cart Items Container -->
+      <div id="cart-items-list" class="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
+        <!-- Cart Items loaded dynamically -->
+      </div>
+
+      <!-- Price Details & Place Order -->
+      <div class="bg-white border-t border-gray-200 p-4 flex flex-col gap-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <div>
+          <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Price Details</h4>
+          <div class="flex flex-col gap-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-gray-600">Price (<span id="cart-calc-qty">0</span> items)</span>
+              <span id="cart-calc-original-price">₹0</span>
+            </div>
+            <div class="flex justify-between text-fkGreen">
+              <span>Discount</span>
+              <span id="cart-calc-discount">-₹0</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Delivery Charges</span>
+              <span class="text-fkGreen font-medium">FREE</span>
+            </div>
+            <div class="flex justify-between border-t border-dashed pt-2 font-bold text-base text-gray-900">
+              <span>Total Amount</span>
+              <span id="cart-calc-total">₹0</span>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="proceedToCheckout()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded shadow transition-all uppercase tracking-wider text-sm flex items-center justify-center gap-2">
+          <i class="fa-solid fa-bolt"></i> Place Order
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 4. CHECKOUT MODAL -->
+  <div id="checkout-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-md max-w-xl w-full p-6 shadow-2xl relative animate-scale-up">
+      <button onclick="closeCheckoutModal()" class="absolute right-4 top-4 text-gray-400 hover:text-gray-600 text-xl font-bold">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <h2 class="text-xl font-bold text-gray-900 border-b pb-3 mb-4">Secure Checkout</h2>
+      
+      <form id="checkout-form" onsubmit="processOrder(event)" class="flex flex-col gap-4">
+        <div>
+          <h3 class="font-bold text-xs uppercase text-gray-500 mb-2">1. Delivery Address</h3>
+          <div class="grid grid-cols-2 gap-3">
+            <input type="text" required placeholder="Full Name" class="border p-2 rounded text-sm focus:outline-fkBlue">
+            <input type="text" required placeholder="Phone Number" class="border p-2 rounded text-sm focus:outline-fkBlue">
+            <input type="text" required placeholder="Pincode" class="border p-2 rounded text-sm focus:outline-fkBlue col-span-2">
+            <textarea required placeholder="Address (Area and Street)" class="border p-2 rounded text-sm focus:outline-fkBlue col-span-2 h-16"></textarea>
+          </div>
+        </div>
+
+        <div class="border-t pt-4">
+          <h3 class="font-bold text-xs uppercase text-gray-500 mb-2">2. Payment Method</h3>
+          <div class="flex flex-col gap-2">
+            <label class="flex items-center gap-2.5 p-2.5 border rounded cursor-pointer hover:bg-gray-50">
+              <input type="radio" name="payment-method" checked class="accent-fkBlue">
+              <span class="text-sm font-semibold text-gray-800 flex items-center gap-2">
+                <i class="fa-solid fa-money-bill-wave text-fkGreen"></i> Cash on Delivery (COD)
+              </span>
+            </label>
+            <label class="flex items-center gap-2.5 p-2.5 border rounded cursor-pointer hover:bg-gray-50">
+              <input type="radio" name="payment-method" class="accent-fkBlue">
+              <span class="text-sm font-semibold text-gray-800 flex items-center gap-2">
+                <i class="fa-solid fa-credit-card text-fkBlue"></i> UPI / Credit Card / Debit Card
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="border-t pt-4 flex items-center justify-between">
+          <div>
+            <span class="text-xs text-gray-500 font-semibold">Total Payable:</span>
+            <div id="checkout-total-price" class="text-lg font-bold text-gray-900">₹0</div>
+          </div>
+          <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3 rounded shadow uppercase text-sm">
+            Confirm Order
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 5. SUCCESS MODAL -->
+  <div id="success-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-md max-w-sm w-full p-8 text-center shadow-2xl relative animate-scale-up">
+      <div class="w-16 h-16 bg-green-100 text-fkGreen rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">Order Placed!</h2>
+      <p class="text-sm text-gray-600 leading-relaxed mb-6">
+        Thank you for shopping on Flipkart. Your order has been placed successfully and will be delivered within 3 days.
+      </p>
+      <button onclick="closeSuccessModal()" class="w-full bg-fkBlue hover:bg-blue-600 text-white font-bold py-2.5 rounded shadow transition-colors text-sm">
+        Continue Shopping
+      </button>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 left-5 bg-gray-900 text-white text-sm px-4 py-3 rounded shadow-lg flex items-center gap-2 transition-all duration-300 transform translate-y-20 opacity-0 z-50">
+    <i class="fa-solid fa-circle-info text-fkYellow"></i>
+    <span id="toast-message">Item added to cart!</span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

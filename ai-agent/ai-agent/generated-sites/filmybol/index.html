@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FilmyBol - Premium Movie Discovery Platform</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="main-header">
+        <div class="container nav-container">
+            <div class="logo-area">
+                <a href="#" class="logo">
+                    <span class="logo-icon"><i class="fa-solid fa-clapperboard"></i></span>
+                    Filmy<span class="highlight">Bol</span>
+                </a>
+            </div>
+
+            <nav class="nav-links">
+                <a href="#" class="nav-link active" data-target="home">Home</a>
+                <a href="#discover" class="nav-link" data-target="discover">Discover</a>
+                <a href="#trending" class="nav-link" data-target="trending">Trending</a>
+                <a href="#about" class="nav-link" data-target="about">About</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="watchlist-toggle-btn" id="watchlistToggleBtn">
+                    <i class="fa-regular fa-bookmark"></i>
+                    <span class="btn-text">Watchlist</span>
+                    <span class="watchlist-count" id="watchlistCount">0</span>
+                </button>
+                <div class="user-profile">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="User Profile" class="avatar">
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav" id="mobileNav">
+        <div class="mobile-nav-header">
+            <div class="logo">
+                <span class="logo-icon"><i class="fa-solid fa-clapperboard"></i></span>
+                Filmy<span class="highlight">Bol</span>
+            </div>
+            <button class="close-mobile-menu" id="closeMobileMenu"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="mobile-nav-links">
+            <a href="#" class="mobile-link active" data-target="home">Home</a>
+            <a href="#discover" class="mobile-link" data-target="discover">Discover</a>
+            <a href="#trending" class="mobile-link" data-target="trending">Trending</a>
+            <a href="#about" class="mobile-link" data-target="about">About</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="heroSection">
+        <div class="hero-bg-overlay"></div>
+        <div class="container hero-container">
+            <div class="hero-content">
+                <div class="hero-badge"><i class="fa-solid fa-fire-flame-curved"></i> FEATURED BLOCKBUSTER</div>
+                <h1 class="hero-title" id="heroTitle">Dune: Part Two</h1>
+                <div class="hero-meta">
+                    <span class="hero-rating"><i class="fa-solid fa-star"></i> 8.8</span>
+                    <span class="hero-year">2024</span>
+                    <span class="hero-duration">2h 46m</span>
+                    <span class="hero-category">Sci-Fi / Adventure</span>
+                </div>
+                <p class="hero-description" id="heroDescription">
+                    Paul Atreides unites with Chani and the Fremen while seeking revenge against the conspirators who destroyed his family. Facing a choice between the love of his life and the fate of the universe, he endeavors to prevent a terrible future only he can foresee.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" id="heroPlayBtn">
+                        <i class="fa-solid fa-play"></i> Watch Trailer
+                    </button>
+                    <button class="btn btn-secondary" id="heroDetailsBtn">
+                        <i class="fa-solid fa-circle-info"></i> More Info
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <main class="main-content" id="discover">
+        <div class="container">
+            
+            <!-- Search & Filters Container -->
+            <div class="filter-section">
+                <div class="search-bar-container">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Search movies, directors, actors...">
+                    <button class="clear-search-btn" id="clearSearchBtn"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <div class="filter-controls">
+                    <div class="genre-pills-container">
+                        <div class="genre-pills" id="genrePills">
+                            <button class="genre-pill active" data-genre="all">All</button>
+                            <button class="genre-pill" data-genre="Action">Action</button>
+                            <button class="genre-pill" data-genre="Sci-Fi">Sci-Fi</button>
+                            <button class="genre-pill" data-genre="Drama">Drama</button>
+                            <button class="genre-pill" data-genre="Thriller">Thriller</button>
+                            <button class="genre-pill" data-genre="Animation">Animation</button>
+                            <button class="genre-pill" data-genre="Romance">Romance</button>
+                        </div>
+                    </div>
+
+                    <div class="sort-container">
+                        <label for="sortSelect"><i class="fa-solid fa-arrow-down-wide-short"></i> Sort By:</label>
+                        <select id="sortSelect" class="sort-dropdown">
+                            <option value="popular">Popularity</option>
+                            <option value="rating">Rating (High to Low)</option>
+                            <option value="year-new">Year (Newest)</option>
+                            <option value="year-old">Year (Oldest)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Filters Status -->
+            <div class="status-bar" id="statusBar" style="display: none;">
+                <span class="status-text" id="statusText">Showing 12 movies</span>
+                <button class="reset-filters-btn" id="resetFiltersBtn">Reset Filters</button>
+            </div>
+
+            <!-- Movie Grid -->
+            <section class="movies-grid-section">
+                <h2 class="section-title" id="gridTitle">Popular Discoveries</h2>
+                <div class="movies-grid" id="moviesGrid">
+                    <!-- Dynamic Movie Cards will be inserted here by JavaScript -->
+                </div>
+                <!-- No Results State -->
+                <div class="no-results" id="noResults" style="display: none;">
+                    <i class="fa-regular fa-face-frown-open"></i>
+                    <h3>No movies found</h3>
+                    <p>We couldn't find any movies matching your search. Try adjusting your filters or search keywords!</p>
+                    <button class="btn btn-primary" id="clearAllFiltersBtn">Clear Filters</button>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Watchlist Sidebar Drawer -->
+    <div class="watchlist-drawer" id="watchlistDrawer">
+        <div class="drawer-header">
+            <h3><i class="fa-solid fa-bookmark highlight"></i> Your Watchlist</h3>
+            <button class="close-drawer-btn" id="closeDrawerBtn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="drawer-content">
+            <div class="watchlist-items" id="watchlistItems">
+                <!-- Watchlist Items will be dynamically listed here -->
+            </div>
+            <div class="watchlist-empty" id="watchlistEmpty">
+                <i class="fa-regular fa-bookmark"></i>
+                <p>Your watchlist is empty.</p>
+                <span>Add movies from the catalog to keep track of what you want to watch next!</span>
+            </div>
+        </div>
+        <div class="drawer-footer" id="drawerFooter" style="display: none;">
+            <button class="btn btn-primary btn-block" id="clearWatchlistBtn">Clear All Items</button>
+        </div>
+    </div>
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+
+    <!-- Movie Details Modal -->
+    <div class="modal-overlay" id="movieModal">
+        <div class="movie-modal">
+            <button class="close-modal-btn" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            
+            <!-- Modal Backdrop Image -->
+            <div class="modal-backdrop" id="modalBackdrop">
+                <div class="backdrop-gradient"></div>
+                <button class="play-trailer-btn-large" id="modalPlayTrailerBtn">
+                    <i class="fa-solid fa-play"></i> Play Trailer
+                </button>
+            </div>
+
+            <!-- Modal Content Layout -->
+            <div class="modal-container">
+                <div class="modal-grid">
+                    <!-- Left Side: Poster & Quick Action Buttons -->
+                    <div class="modal-sidebar">
+                        <img src="" alt="Movie Poster" class="modal-poster" id="modalPoster">
+                        <div class="modal-sidebar-actions">
+                            <button class="btn btn-primary btn-block" id="modalWatchlistToggle">
+                                <i class="fa-solid fa-plus"></i> Add to Watchlist
+                            </button>
+                            <button class="btn btn-secondary btn-block" id="modalShareBtn">
+                                <i class="fa-solid fa-share-nodes"></i> Share Movie
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right Side: Extensive Meta Info, Plot, Casting, Reviews -->
+                    <div class="modal-main">
+                        <h2 class="modal-movie-title" id="modalTitle">Movie Title</h2>
+                        
+                        <div class="modal-meta">
+                            <span class="modal-rating-badge"><i class="fa-solid fa-star"></i> <span id="modalRating">8.5</span></span>
+                            <span class="modal-meta-item" id="modalYear">2024</span>
+                            <span class="modal-meta-item" id="modalDuration">2h 15m</span>
+                            <span class="modal-meta-item" id="modalAgeRating">PG-13</span>
+                        </div>
+
+                        <div class="modal-genres" id="modalGenres">
+                            <!-- Genres as pills -->
+                        </div>
+
+                        <div class="modal-section">
+                            <h4 class="modal-section-title">Synopsis</h4>
+                            <p class="modal-synopsis" id="modalSynopsis">
+                                Movie description goes here...
+                            </p>
+                        </div>
+
+                        <div class="modal-cast-crew">
+                            <div class="cast-crew-item">
+                                <span class="label">Director:</span>
+                                <span class="value" id="modalDirector">Christopher Nolan</span>
+                            </div>
+                            <div class="cast-crew-item">
+                                <span class="label">Cast:</span>
+                                <span class="value" id="modalCast">Actor 1, Actor 2, Actor 3</span>
+                            </div>
+                        </div>
+
+                        <!-- User Review & Community Section -->
+                        <div class="modal-section comments-section">
+                            <h4 class="modal-section-title">Viewer Reviews & Ratings</h4>
+                            
+                            <!-- Add Review Form -->
+                            <form class="add-review-form" id="addReviewForm">
+                                <div class="rating-input-container">
+                                    <span>Your Rating:</span>
+                                    <div class="star-rating" id="starRatingInput">
+                                        <i class="fa-regular fa-star" data-rating="1"></i>
+                                        <i class="fa-regular fa-star" data-rating="2"></i>
+                                        <i class="fa-regular fa-star" data-rating="3"></i>
+                                        <i class="fa-regular fa-star" data-rating="4"></i>
+                                        <i class="fa-regular fa-star" data-rating="5"></i>
+                                    </div>
+                                </div>
+                                <div class="review-input-group">
+                                    <input type="text" id="reviewerName" placeholder="Your name" required>
+                                    <textarea id="reviewText" placeholder="Write your review or thoughts about this movie..." rows="2" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm">Submit Review</button>
+                            </form>
+
+                            <!-- Reviews List -->
+                            <div class="reviews-list" id="reviewsList">
+                                <!-- Dynamic Reviews go here -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Trailer Modal (Movie Cinema Experience) -->
+    <div class="trailer-modal-overlay" id="trailerModal">
+        <div class="trailer-modal">
+            <button class="close-trailer-btn" id="closeTrailerBtn"><i class="fa-solid fa-xmark"></i></button>
+            <div class="video-container">
+                <!-- Fallback interactive trailer player with a highly immersive cinematic visualizer -->
+                <div class="mock-video-player" id="mockVideoPlayer">
+                    <div class="video-overlay-play">
+                        <i class="fa-solid fa-play"></i>
+                        <p>Loading Cinematic Trailer...</p>
+                    </div>
+                    <div class="video-controls">
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" id="videoProgressBar"></div>
+                        </div>
+                        <div class="controls-row">
+                            <div class="left-controls">
+                                <button class="control-btn" id="videoPlayPause"><i class="fa-solid fa-pause"></i></button>
+                                <span class="video-time" id="videoTime">0:15 / 2:30</span>
+                            </div>
+                            <div class="right-controls">
+                                <button class="control-btn"><i class="fa-solid fa-volume-high"></i></button>
+                                <button class="control-btn" id="videoFullscreen"><i class="fa-solid fa-expand"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Dynamic details for the mock player background -->
+                    <div class="video-bg-animation" id="videoBgAnimation"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-text">
+                    <div class="about-badge">ABOUT FILMYBOL</div>
+                    <h2>The Ultimate Hub for Movie Enthusiasts</h2>
+                    <p>FilmyBol is a state-of-the-art cinematic discovery platform designed for movie buffs who demand a premium, clutter-free, and immersive experience. Discover blockbusters, indie gems, anime favorites, and global hits all under one elegant dark theme roof.</p>
+                    <div class="features-list">
+                        <div class="feature-item">
+                            <div class="feature-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                            <div class="feature-desc">
+                                <h4>Smart Discovery</h4>
+                                <p>Filter by genre, sort by rating or release year, and find exactly what you're in the mood for instantly.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon"><i class="fa-solid fa-bookmark"></i></div>
+                            <div class="feature-desc">
+                                <h4>Personalized Watchlist</h4>
+                                <p>Save your favorite movies to your local watchlist so you never lose track of your next cinema session.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon"><i class="fa-solid fa-comments"></i></div>
+                            <div class="feature-desc">
+                                <h4>Interactive Community</h4>
+                                <p>Rate movies, read honest reviews from other cinema lovers, and post your own thoughts dynamically.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <div class="visual-card-stack">
+                        <div class="visual-card card-1">
+                            <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=400&q=80" alt="Cinema">
+                        </div>
+                        <div class="visual-card card-2">
+                            <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=400&q=80" alt="Theater seat">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section">
+        <div class="container">
+            <div class="newsletter-container">
+                <div class="newsletter-content">
+                    <h3>Get Weekly Movie Recommendations</h3>
+                    <p>Join over 50,000+ film enthusiasts who receive our weekly curated cinematic lists, trailer releases, and exclusive reviews directly in their inbox.</p>
+                </div>
+                <form class="newsletter-form" id="newsletterForm">
+                    <input type="email" placeholder="Enter your email address" required>
+                    <button type="submit" class="btn btn-primary">Subscribe Now</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-col brand-col">
+                <div class="logo">
+                    <span class="logo-icon"><i class="fa-solid fa-clapperboard"></i></span>
+                    Filmy<span class="highlight">Bol</span>
+                </div>
+                <p class="footer-tagline">Expressing cinema, discussing stories. Your ultimate guide to the world of entertainment and movies.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Discover</h4>
+                <ul>
+                    <li><a href="#discover">Trending Movies</a></li>
+                    <li><a href="#discover">High Rated Classics</a></li>
+                    <li><a href="#discover">Sci-Fi Blockbusters</a></li>
+                    <li><a href="#discover">Action Pack Thrillers</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="#about">About FilmyBol</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Use</a></li>
+                    <li><a href="#">Contact Support</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact Us</h4>
+                <p class="contact-info"><i class="fa-solid fa-envelope"></i> contact@filmybol.com</p>
+                <p class="contact-info"><i class="fa-solid fa-phone"></i> +1 (555) 019-2834</p>
+                <p class="contact-info"><i class="fa-solid fa-location-dot"></i> 88 Cinema Blvd, Los Angeles, CA</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container footer-bottom-flex">
+                <p>&copy; 2025 FilmyBol. Handcrafted with passion for movie lovers worldwide.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Script File -->
+    <script src="script.js"></script>
+</body>
+</html>
